@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MvcNetCoreAzureStorage.Models;
 using MvcNetCoreAzureStorage.Services;
 
 namespace MvcNetCoreAzureStorage.Controllers
@@ -42,6 +43,12 @@ namespace MvcNetCoreAzureStorage.Controllers
             return View();
         }
 
+        public async Task<IActionResult> ListBlobs(string containername)
+        {
+            List<BlobModel> models = await this.service.GetBlobsAsync(containername);
+            return View(models);
+        }
+
         [HttpPost]
         public async Task<IActionResult> UploadBlob(string containername, IFormFile file)
         {
@@ -50,7 +57,13 @@ namespace MvcNetCoreAzureStorage.Controllers
             {
                 await this.service.UploadBlobAsync(containername, blobName, stream);
             }
-            return RedirectToAction("VerBlobsContainer", new { containername = containername });
+            return RedirectToAction("ListBlobs", new { containername = containername });
+        }
+
+        public async Task<IActionResult> DeleteBlob(string containername, string blobname)
+        {
+            await this.service.DeleteBlobAsync(containername, blobname);
+            return RedirectToAction("ListBlobs", new { containername = containername });
         }
     }
 }
