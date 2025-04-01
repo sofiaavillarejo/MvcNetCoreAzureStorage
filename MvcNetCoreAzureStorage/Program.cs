@@ -1,9 +1,16 @@
+using Azure.Storage.Blobs;
 using MvcNetCoreAzureStorage.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+string azureKeys = builder.Configuration.GetValue<string>("AzureKeys:StorageAccount");
+BlobServiceClient blobServiceClient = new BlobServiceClient(azureKeys);
+builder.Services.AddTransient<BlobServiceClient>(x => blobServiceClient);
+
 // Add services to the container.
 builder.Services.AddTransient<ServiceStorageFiles>();
+builder.Services.AddTransient<ServiceStorageBlobs>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
