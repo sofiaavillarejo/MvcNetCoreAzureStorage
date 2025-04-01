@@ -1,12 +1,13 @@
 ﻿using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs;
 using MvcNetCoreAzureStorage.Models;
+using System.IO;
 
 namespace MvcNetCoreAzureStorage.Services
 {
     public class ServiceStorageBlobs
     {
-        private BlobServiceClient client;
+        public BlobServiceClient client;
 
         public ServiceStorageBlobs(BlobServiceClient client)
         {
@@ -48,7 +49,7 @@ namespace MvcNetCoreAzureStorage.Services
                 blob.Nombre = item.Name;
                 blob.Contenedor = containerName;
                 blob.Url = blobClient.Uri.AbsoluteUri;
-
+                
                 models.Add(blob);
             }
             return models;

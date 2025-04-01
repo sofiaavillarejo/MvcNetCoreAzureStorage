@@ -1,0 +1,67 @@
+﻿@model IEnumerable<MvcNetCoreAzureStorage.Models.Cliente>
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+	<a asp-controller="AzureTables" asp-action="ClientesEmpresa">Clientes Empresa</a>
+</p>
+<a asp-action="Create" asp-controller="AzureTables"
+   class="btn btn-success">
+	Create New
+</a>
+
+@if (Model != null)
+{
+	<table class="table table-warning">
+		<thead>
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.Nombre)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Edad)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Salario)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Empresa)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.IdCliente)
+				</th>
+				<th>Acciones</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Nombre)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Edad)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Salario)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Empresa)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.IdCliente)
+					</td>
+					<td>
+						<a asp-controller="AzureTables" asp-action="Details" asp-route-partitionkey="@item.PartitionKey" asp-route-rowkey="@item.RowKey">Detalles</a>
+						<a class="btn btn-danger" asp-controller="AzureTables" asp-action="Delete" asp-route-partitionkey="@item.PartitionKey" asp-route-rowkey="@item.RowKey">Delete</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Mvc;
 using MvcNetCoreAzureStorage.Models;
 using MvcNetCoreAzureStorage.Services;
 
@@ -36,17 +37,16 @@ namespace MvcNetCoreAzureStorage.Controllers
             await this.service.DeleteContainerAsync(containername);
             return RedirectToAction("Index");
         }
+        public async Task<IActionResult> ListBlobs(string containername)
+        {
+            List<BlobModel> models = await this.service.GetBlobsAsync(containername);
+            return View(models);
+        }
 
         public IActionResult UploadBlob(string containername)
         {
             ViewData["CONTAINER"] = containername;
             return View();
-        }
-
-        public async Task<IActionResult> ListBlobs(string containername)
-        {
-            List<BlobModel> models = await this.service.GetBlobsAsync(containername);
-            return View(models);
         }
 
         [HttpPost]
@@ -65,5 +65,17 @@ namespace MvcNetCoreAzureStorage.Controllers
             await this.service.DeleteBlobAsync(containername, blobname);
             return RedirectToAction("ListBlobs", new { containername = containername });
         }
+
+        public async Task<IActionResult> GetImagen(string containerName, string nombreBlob)
+        {
+            BlobContainerClient containerClient = this.service.client.GetBlobContainerClient(containerName);
+            BlobClient blobClient = containerClient.GetBlobClient(nombreBlob);
+
+            var response = await blobClient.DownloadAsync();
+            Stream stream = response.Value.Content;
+
+            return File(stream, "image/jpeg");
+        }
+
     }
 }

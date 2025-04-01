@@ -6,9 +6,6 @@
 
 <h1>ListBlobs</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -37,7 +34,9 @@
                 @Html.DisplayFor(modelItem => item.Contenedor)
             </td>
             <td>
-                <img src="@item.Url" style="width:70px; height: 70px;" />
+                    <img src="@Url.Action("GetImagen", "AzureBlobs", new { containerName = item.Contenedor, nombreBlob = item.Nombre })"
+                         style="width: 60%; height: 60%;"   />
+
                     <a asp-controller="AzureBlobs" asp-action="DeleteBlob" asp-route-containername="@item.Contenedor" asp-route-blobname="@item.Nombre" class="btn btn-danger">Delete blob: <b>@item.Nombre</b></a>
             </td>
         </tr>
